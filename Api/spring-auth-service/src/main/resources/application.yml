@@ -2,6 +2,15 @@ spring:
   application:
     name: spring-auth-service
 
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+
 # Database connection
   datasource:
     driver-class-name: org.postgresql.Driver
