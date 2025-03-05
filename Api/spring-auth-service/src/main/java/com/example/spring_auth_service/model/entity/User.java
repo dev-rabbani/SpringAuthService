@@ -1,5 +1,6 @@
 package com.example.spring_auth_service.model.entity;
 
+import com.example.spring_auth_service.model.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -14,10 +16,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class User extends BaseEntity {
     @Column(name = "firstname", nullable = false, length = 25)
     private String firstName;
     @Column(name = "lastname", length = 25)
@@ -32,4 +31,11 @@ public class User {
     private String phoneNumber;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 }
