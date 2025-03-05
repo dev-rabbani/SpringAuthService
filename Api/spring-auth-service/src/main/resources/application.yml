@@ -24,3 +24,10 @@ spring:
       host: localhost
       port: 6379
       password: admin@123
+
+application:
+# Jwt Configuration
+  jwt:
+    config:
+      encryption-key: 5heUCJxsTsaYyTE6+XB+tnpvdZkttNv5PBWHe9v9q73kGjDa2+UI2YQMWPj1Fpec
+      token-expiration: 600000
