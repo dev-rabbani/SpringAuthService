@@ -1,6 +1,9 @@
 spring:
   application:
     name: spring-auth-service
+  mvc:
+    problemdetails:
+      enabled: true
 
   jpa:
     generate-ddl: true
