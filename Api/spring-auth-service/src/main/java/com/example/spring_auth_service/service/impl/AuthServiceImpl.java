@@ -1,7 +1,7 @@
 package com.example.spring_auth_service.service.impl;
 
 import com.example.spring_auth_service.model.dto.request.UserRegistrationRequest;
-import com.example.spring_auth_service.model.dto.response.UserResponse;
+import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.model.entity.User;
 import com.example.spring_auth_service.service.AuthService;
 import com.example.spring_auth_service.service.UserService;
@@ -18,7 +18,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse registerUser(UserRegistrationRequest request) {
+    public RegisteredUserResponse registerUser(UserRegistrationRequest request) {
         return mapToUserResponse(userService.save(mapToUser(request)));
     }
 
@@ -34,14 +34,10 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private UserResponse mapToUserResponse(User user) {
-        return UserResponse.builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
+    private RegisteredUserResponse mapToUserResponse(User user) {
+        return RegisteredUserResponse.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .dateOfBirth(user.getDateOfBirth())
                 .build();
     }
 }

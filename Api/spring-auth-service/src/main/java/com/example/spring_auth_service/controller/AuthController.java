@@ -1,8 +1,8 @@
 package com.example.spring_auth_service.controller;
 
 import com.example.spring_auth_service.model.dto.request.UserRegistrationRequest;
-import com.example.spring_auth_service.model.dto.response.UserResponse;
-import com.example.spring_auth_service.model.entity.User;
+import com.example.spring_auth_service.model.dto.response.ApiResponse;
+import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.spring_auth_service.constant.ApiEndpointConstant.AUTH_ENDPOINT;
+import static com.example.spring_auth_service.constant.ApplicationConstant.USER_REGISTRATION_SUCCESSFUL;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +24,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<ApiResponse<RegisteredUserResponse>> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
+        RegisteredUserResponse user = authService.registerUser(request);
+
         return ResponseEntity.ok()
-                .body(authService.registerUser(request));
+                .body(ApiResponse.<RegisteredUserResponse>builder()
+                        .message(USER_REGISTRATION_SUCCESSFUL)
+                        .data(user)
+                        .build());
     }
 }
