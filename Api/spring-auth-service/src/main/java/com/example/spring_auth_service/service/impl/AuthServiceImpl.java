@@ -1,5 +1,6 @@
 package com.example.spring_auth_service.service.impl;
 
+import com.example.spring_auth_service.mapper.UserMapper;
 import com.example.spring_auth_service.model.dto.request.UserRegistrationRequest;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.model.entity.User;
@@ -16,28 +17,15 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public RegisteredUserResponse registerUser(UserRegistrationRequest request) {
-        return mapToUserResponse(userService.save(mapToUser(request)));
-    }
+        User user = userMapper.userRegistrationRequestToUser(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-    private User mapToUser(UserRegistrationRequest request) {
-        return User.builder()
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .username(request.username())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .phoneNumber(request.phoneNumber())
-                .dateOfBirth(request.dateOfBirth())
-                .build();
-    }
+        User registeredUser = userService.save(user);
 
-    private RegisteredUserResponse mapToUserResponse(User user) {
-        return RegisteredUserResponse.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .build();
+        return userMapper.userToRegisteredUserResponse(registeredUser);
     }
 }
