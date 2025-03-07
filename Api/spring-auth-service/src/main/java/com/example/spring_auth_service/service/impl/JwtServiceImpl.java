@@ -1,6 +1,7 @@
 package com.example.spring_auth_service.service.impl;
 
 import com.example.spring_auth_service.config.JwtConfig;
+import com.example.spring_auth_service.service.BlackListedTokenService;
 import com.example.spring_auth_service.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Collections;
@@ -24,6 +24,7 @@ import java.util.function.Function;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
     private final JwtConfig jwtConfig;
+    private final BlackListedTokenService blackListedTokenService;
 
     @Override
     public String generateToken(UserDetails userDetails) {
@@ -36,10 +37,23 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        if(isTokenExpired(token)) {
+            return false;
+        }
+
+        if(blackListedTokenService.isBlacklisted(token)){
+            return false;
+        }
+
         String username = extractUsername(token);
 
-        return StringUtils.isNotBlank(username) && username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return StringUtils.isNotBlank(username) && username.equals(userDetails.getUsername());
     }
 
     private boolean isTokenExpired(String token) {
@@ -68,10 +82,6 @@ public class JwtServiceImpl implements JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
     }
 
     private SecretKey getSigningKey() {

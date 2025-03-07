@@ -8,6 +8,7 @@ import com.example.spring_auth_service.model.dto.response.LoginResponse;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.model.entity.User;
 import com.example.spring_auth_service.service.AuthService;
+import com.example.spring_auth_service.service.BlackListedTokenService;
 import com.example.spring_auth_service.service.JwtService;
 import com.example.spring_auth_service.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
+import static com.example.spring_auth_service.constant.ApplicationConstant.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final BlackListedTokenService blackListedTokenService;
     private final JwtConfig jwtConfig;
     private final UserMapper userMapper;
 
@@ -54,5 +58,13 @@ public class AuthServiceImpl implements AuthService {
                 .expiresAt(LocalDateTime.now()
                         .plus(Duration.ofMillis(jwtConfig.getTokenExpiration())))
                 .build();
+    }
+
+    @Override
+    public void logout(String authorizationHeader) {
+        String token = authorizationHeader.substring(BEARER_PREFIX.length());
+        Date expirationDate = jwtService.extractExpiration(token);
+
+        blackListedTokenService.markAsBlacklisted(token, expirationDate);
     }
 }

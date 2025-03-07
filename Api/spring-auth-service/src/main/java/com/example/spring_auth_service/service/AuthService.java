@@ -8,4 +8,5 @@ import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse
 public interface AuthService {
     RegisteredUserResponse registerUser(UserRegistrationRequest request);
     LoginResponse login(LoginRequest request);
+    void logout(String authorizationHeader);
 }

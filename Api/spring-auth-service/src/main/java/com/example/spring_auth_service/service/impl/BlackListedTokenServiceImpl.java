@@ -5,11 +5,10 @@ import com.example.spring_auth_service.service.BlackListedTokenService;
 import com.example.spring_auth_service.service.CacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -19,9 +18,9 @@ public class BlackListedTokenServiceImpl implements BlackListedTokenService {
     private final CacheService cacheService;
 
     @Override
-    public void markAsBlacklisted(String token, LocalDateTime expiresAt) {
+    public void markAsBlacklisted(String token, Date expirationDate) {
         String redisKey = getRedisKey(token);
-        long expiryDurationInMS = ChronoUnit.MILLIS.between(LocalDateTime.now(), expiresAt);
+        long expiryDurationInMS = expirationDate.getTime() - System.currentTimeMillis();
 
         cacheService.putWithExpiry(redisKey, token, expiryDurationInMS, TimeUnit.MILLISECONDS);
     }
@@ -30,9 +29,8 @@ public class BlackListedTokenServiceImpl implements BlackListedTokenService {
     public boolean isBlacklisted(String token) {
         String redisKey = getRedisKey(token);
 
-        return cacheService.get(redisKey, String.class)
-                .map(StringUtils::isNotBlank)
-                .orElse(false);
+        Optional<String> tokenOptional = cacheService.get(redisKey, String.class);
+        return tokenOptional.isPresent();
     }
 
     private String getRedisKey(String token) {

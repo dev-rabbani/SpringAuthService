@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.spring_auth_service.constant.ApiEndpointConstant.AUTH_ENDPOINT;
 import static com.example.spring_auth_service.constant.ApplicationConstant.LOGIN_SUCCESSFUL;
@@ -45,6 +42,15 @@ public class AuthController {
                 .body(ApiResponse.<LoginResponse>builder()
                         .message(LOGIN_SUCCESSFUL)
                         .data(loginResponse)
+                        .build());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader("Authorization") String authorizationHeader) {
+        authService.logout(authorizationHeader);
+        return ResponseEntity.ok()
+                .body(ApiResponse.<Void>builder()
+                        .message(LOGIN_SUCCESSFUL)
                         .build());
     }
 }

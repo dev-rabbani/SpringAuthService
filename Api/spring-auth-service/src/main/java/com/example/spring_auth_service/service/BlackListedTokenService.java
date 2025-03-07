@@ -1,8 +1,8 @@
 package com.example.spring_auth_service.service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public interface BlackListedTokenService {
-    void markAsBlacklisted(String token, LocalDateTime expiresAt);
+    void markAsBlacklisted(String token, Date expirationDate);
     boolean isBlacklisted(String token);
 }
