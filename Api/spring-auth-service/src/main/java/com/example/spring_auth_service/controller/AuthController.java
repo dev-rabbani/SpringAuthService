@@ -13,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.spring_auth_service.constant.ApiEndpointConstant.AUTH_ENDPOINT;
-import static com.example.spring_auth_service.constant.ApplicationConstant.LOGIN_SUCCESSFUL;
-import static com.example.spring_auth_service.constant.ApplicationConstant.USER_REGISTRATION_SUCCESSFUL;
+import static com.example.spring_auth_service.constant.ApplicationConstant.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,9 +47,10 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader("Authorization") String authorizationHeader) {
         authService.logout(authorizationHeader);
+
         return ResponseEntity.ok()
                 .body(ApiResponse.<Void>builder()
-                        .message(LOGIN_SUCCESSFUL)
+                        .message(LOGOUT_SUCCESSFUL)
                         .build());
     }
 }
