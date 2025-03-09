@@ -8,4 +8,5 @@ public class ApiEndpointConstant {
     private static final String API_VERSION = "/api/v1";
 
     public static final String AUTH_ENDPOINT = API_VERSION + "/auth";
+    public static final String REFRESH_TOKEN_ENDPOINT = AUTH_ENDPOINT + "/refresh";
 }

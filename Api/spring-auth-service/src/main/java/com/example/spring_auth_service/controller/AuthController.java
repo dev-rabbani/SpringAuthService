@@ -6,6 +6,9 @@ import com.example.spring_auth_service.model.dto.response.ApiResponse;
 import com.example.spring_auth_service.model.dto.response.LoginResponse;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.service.AuthService;
+import com.example.spring_auth_service.service.RefreshTokenService;
+import com.example.spring_auth_service.util.HttpUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,7 @@ import static com.example.spring_auth_service.constant.ApplicationConstant.*;
 @RequestMapping(value = AUTH_ENDPOINT)
 public class AuthController {
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisteredUserResponse>> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
@@ -34,8 +38,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request,
+                                                            HttpServletResponse response) {
         LoginResponse loginResponse = authService.login(request);
+
+        HttpUtil.setRefreshTokenCookie(response, refreshTokenService.create(request.username()));
 
         return ResponseEntity.ok()
                 .body(ApiResponse.<LoginResponse>builder()
