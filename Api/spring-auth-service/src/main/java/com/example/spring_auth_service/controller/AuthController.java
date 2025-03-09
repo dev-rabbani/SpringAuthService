@@ -6,7 +6,6 @@ import com.example.spring_auth_service.model.dto.response.ApiResponse;
 import com.example.spring_auth_service.model.dto.response.LoginResponse;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.service.AuthService;
-import com.example.spring_auth_service.service.RefreshTokenService;
 import com.example.spring_auth_service.util.HttpUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
