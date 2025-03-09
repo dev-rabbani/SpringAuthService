@@ -60,4 +60,15 @@ public class AuthController {
                         .message(LOGOUT_SUCCESSFUL)
                         .build());
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<LoginResponse>> refreshAccessToken(@CookieValue(REFRESH_TOKEN_COOKIE_NAME) String refreshToken) {
+        LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.<LoginResponse>builder()
+                        .message(ACCESS_TOKEN_REFRESHED)
+                        .data(loginResponse)
+                        .build());
+    }
 }

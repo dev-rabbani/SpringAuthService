@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,5 +33,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                  .build();
 
         return refreshTokenRepository.save(refreshToken);
+    }
+
+    @Override
+    public Optional<RefreshToken> findByToken(String refreshToken) {
+        return refreshTokenRepository.findByToken(refreshToken);
+    }
+
+    @Override
+    public boolean isValid(RefreshToken refreshToken) {
+        return refreshToken != null && refreshToken.getExpiryDate().isAfter(LocalDateTime.now());
     }
 }

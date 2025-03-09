@@ -10,11 +10,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static com.example.spring_auth_service.constant.ApiEndpointConstant.REFRESH_TOKEN_ENDPOINT;
+import static com.example.spring_auth_service.constant.ApplicationConstant.REFRESH_TOKEN_COOKIE_NAME;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpUtil {
-    private static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
-
     public static void setRefreshTokenCookie(HttpServletResponse response, RefreshToken refreshToken) {
         Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken.getToken());
         cookie.setPath(REFRESH_TOKEN_ENDPOINT);
