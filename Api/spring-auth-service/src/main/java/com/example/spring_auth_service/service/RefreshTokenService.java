@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface RefreshTokenService {
     RefreshToken create(String username);
     Optional<RefreshToken> findByToken(String refreshToken);
-    boolean isValid(RefreshToken refreshToken);
 }

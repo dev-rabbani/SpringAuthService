@@ -33,5 +33,6 @@ application:
   jwt:
     config:
       encryption-key: 5heUCJxsTsaYyTE6+XB+tnpvdZkttNv5PBWHe9v9q73kGjDa2+UI2YQMWPj1Fpec
+      # Expiration in milliseconds
       token-expiration: 600000 # 10 minutes
       refresh-token-expiration: 604800000 # 7 days

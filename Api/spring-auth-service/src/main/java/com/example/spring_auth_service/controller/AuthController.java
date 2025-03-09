@@ -63,7 +63,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<LoginResponse>> refreshAccessToken(@CookieValue(REFRESH_TOKEN_COOKIE_NAME) String refreshToken) {
-        LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+        LoginResponse loginResponse = authService.generateNewAccessToken(refreshToken);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.<LoginResponse>builder()

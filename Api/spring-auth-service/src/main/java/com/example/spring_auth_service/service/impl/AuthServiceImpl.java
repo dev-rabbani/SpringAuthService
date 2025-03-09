@@ -76,19 +76,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse refreshAccessToken(String refreshToken) {
+    public LoginResponse generateNewAccessToken(String refreshToken) {
         if(StringUtils.isBlank(refreshToken)) {
             throw new RefreshTokenMissingException(REFRESH_TOKEN_MISSING.getMessage());
         }
 
-        RefreshToken token = refreshTokenService.findByToken(refreshToken)
+        RefreshToken refreshTokenEntity = refreshTokenService.findByToken(refreshToken)
                 .orElseThrow(() -> new InvalidRefreshTokenException(INVALID_REFRESH_TOKEN.getMessage()));
 
-        if(!refreshTokenService.isValid(token)) {
+        if(refreshTokenEntity.isExpired()) {
             throw new InvalidRefreshTokenException(INVALID_REFRESH_TOKEN.getMessage());
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(token.getUser().getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(refreshTokenEntity .getUser().getUsername());
         String accessToken = jwtService.generateToken(userDetails);
 
         return LoginResponse.builder()
