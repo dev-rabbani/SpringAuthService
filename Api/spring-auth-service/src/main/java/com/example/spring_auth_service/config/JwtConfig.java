@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class JwtConfig {
     private String encryptionKey;
     private long tokenExpiration;
+    private long refreshTokenExpiration;
 }
