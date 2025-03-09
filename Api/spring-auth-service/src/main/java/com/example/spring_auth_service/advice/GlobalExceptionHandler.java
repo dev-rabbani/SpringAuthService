@@ -1,5 +1,6 @@
 package com.example.spring_auth_service.advice;
 
+import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.model.dto.response.ValidationErrorResponse;
 import jakarta.persistence.EntityExistsException;
@@ -42,6 +43,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {RefreshTokenMissingException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleRefreshTokenMissingException(RefreshTokenMissingException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {InvalidRefreshTokenException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ProblemDetail handleInvalidRefreshTokenException(InvalidRefreshTokenException exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 }
