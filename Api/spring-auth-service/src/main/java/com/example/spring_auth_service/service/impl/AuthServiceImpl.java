@@ -85,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new InvalidRefreshTokenException(INVALID_REFRESH_TOKEN.getMessage()));
 
         if(refreshTokenEntity.isExpired()) {
+            refreshTokenService.delete(refreshTokenEntity);
             throw new InvalidRefreshTokenException(INVALID_REFRESH_TOKEN.getMessage());
         }
 
