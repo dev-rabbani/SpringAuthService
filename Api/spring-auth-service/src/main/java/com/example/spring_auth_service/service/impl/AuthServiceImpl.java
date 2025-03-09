@@ -59,11 +59,13 @@ public class AuthServiceImpl implements AuthService {
 
         var user = (User) authentication.getPrincipal();
         String accessToken = jwtService.generateToken(user);
+        RefreshToken refreshToken = refreshTokenService.create(request.username());
 
         return LoginResponse.builder()
                 .accessToken(accessToken)
                 .expiresAt(LocalDateTime.now()
                         .plus(Duration.ofMillis(jwtConfig.getTokenExpiration())))
+                .refreshToken(refreshToken)
                 .build();
     }
 

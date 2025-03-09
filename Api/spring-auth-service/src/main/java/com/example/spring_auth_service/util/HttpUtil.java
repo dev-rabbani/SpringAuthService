@@ -24,4 +24,13 @@ public class HttpUtil {
 
         response.addCookie(cookie);
     }
+
+    public static void deleteRefreshTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, "");
+        cookie.setPath(REFRESH_TOKEN_ENDPOINT);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+    }
 }

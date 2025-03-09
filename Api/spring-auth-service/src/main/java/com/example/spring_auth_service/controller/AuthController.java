@@ -25,51 +25,36 @@ import static com.example.spring_auth_service.constant.ApplicationConstant.*;
 @RequestMapping(value = AUTH_ENDPOINT)
 public class AuthController {
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisteredUserResponse>> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
         RegisteredUserResponse user = authService.registerUser(request);
 
-        return ResponseEntity.ok()
-                .body(ApiResponse.<RegisteredUserResponse>builder()
-                        .message(USER_REGISTRATION_SUCCESSFUL)
-                        .data(user)
-                        .build());
+        return ResponseEntity.ok(ApiResponse.success(USER_REGISTRATION_SUCCESSFUL, user));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request,
                                                             HttpServletResponse response) {
         LoginResponse loginResponse = authService.login(request);
+        HttpUtil.setRefreshTokenCookie(response, loginResponse.refreshToken());
 
-        HttpUtil.setRefreshTokenCookie(response, refreshTokenService.create(request.username()));
-
-        return ResponseEntity.ok()
-                .body(ApiResponse.<LoginResponse>builder()
-                        .message(LOGIN_SUCCESSFUL)
-                        .data(loginResponse)
-                        .build());
+        return ResponseEntity.ok(ApiResponse.success(LOGIN_SUCCESSFUL, loginResponse));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+                                                    HttpServletResponse response) {
         authService.logout(authorizationHeader);
+        HttpUtil.deleteRefreshTokenCookie(response);
 
-        return ResponseEntity.ok()
-                .body(ApiResponse.<Void>builder()
-                        .message(LOGOUT_SUCCESSFUL)
-                        .build());
+        return ResponseEntity.ok(ApiResponse.success(LOGOUT_SUCCESSFUL));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<LoginResponse>> refreshAccessToken(@CookieValue(REFRESH_TOKEN_COOKIE_NAME) String refreshToken) {
         LoginResponse loginResponse = authService.generateNewAccessToken(refreshToken);
 
-        return ResponseEntity.ok()
-                .body(ApiResponse.<LoginResponse>builder()
-                        .message(ACCESS_TOKEN_REFRESHED)
-                        .data(loginResponse)
-                        .build());
+        return ResponseEntity.ok(ApiResponse.success(ACCESS_TOKEN_REFRESHED, loginResponse));
     }
 }
