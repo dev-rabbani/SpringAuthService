@@ -6,6 +6,7 @@ import com.example.spring_auth_service.model.dto.response.ValidationErrorRespons
 import jakarta.persistence.EntityExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +18,12 @@ import static com.example.spring_auth_service.model.enums.ExceptionConstant.METH
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(value = {UsernameNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleUsernameNotFoundException(UsernameNotFoundException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
     @ExceptionHandler(value = {EntityExistsException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ProblemDetail handleRuntimeException(EntityExistsException exception) {

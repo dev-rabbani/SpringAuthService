@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RedisKey {
-    BLACKLISTED_TOKEN("auth.blacklisted.%s");
+    BLACKLISTED_TOKEN("auth.blacklisted.%s"),
+    USER_ENTITY("auth.user.%s");
 
     private final String key;
 
