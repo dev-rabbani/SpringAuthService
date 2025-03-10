@@ -21,6 +21,23 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@NamedEntityGraph(
+        name = "User.rolesWithPermissions",
+        attributeNodes = {
+                @NamedAttributeNode(
+                        value = "roles",
+                        subgraph = "Role.permissions"
+                ),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "Role.permissions",
+                        attributeNodes = {
+                                @NamedAttributeNode("permissions")
+                        }
+                )
+        }
+)
 public class User extends BaseEntity implements UserDetails {
     @Column(name = "firstname", nullable = false, length = 25)
     private String firstName;
@@ -42,7 +59,7 @@ public class User extends BaseEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,6 +68,7 @@ public class User extends BaseEntity implements UserDetails {
         authorities.addAll(roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(Collectors.toSet()));
+
 
         authorities.addAll(roles.stream()
                 .flatMap(role -> role.getPermissions().stream())

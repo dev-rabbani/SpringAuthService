@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import static com.example.spring_auth_service.constant.ApplicationConstant.BEARER_PREFIX;
 
@@ -55,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if(jwtService.isTokenValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
-                            null, Collections.emptyList());
+                            null, userDetails.getAuthorities());
 
                     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                     securityContext.setAuthentication(authenticationToken);
