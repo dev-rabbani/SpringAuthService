@@ -11,4 +11,5 @@ public class ApplicationConstant {
     public static final String LOGIN_SUCCESSFUL = "Login successfully.";
     public static final String LOGOUT_SUCCESSFUL = "Logout successfully.";
     public static final String ACCESS_TOKEN_REFRESHED = "Access token refreshed successfully.";
+    public static final String EMAIL_VERIFICATION_SUCCESSFUL = "Email verified successfully.";
 }

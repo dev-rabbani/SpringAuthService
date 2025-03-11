@@ -56,4 +56,11 @@ public class AuthController {
 
         return ResponseEntity.ok(ApiResponse.success(ACCESS_TOKEN_REFRESHED, loginResponse));
     }
+
+    @GetMapping("/verify")
+    public ResponseEntity<ApiResponse<Void>> verifyUser(@RequestParam(name = "token") String token) {
+        authService.verifyUser(token);
+
+        return ResponseEntity.ok(ApiResponse.success(EMAIL_VERIFICATION_SUCCESSFUL));
+    }
 }

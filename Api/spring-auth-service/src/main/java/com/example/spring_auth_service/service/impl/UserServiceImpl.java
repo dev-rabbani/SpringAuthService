@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User save(User user) {
+    public User create(User user) {
         if(userRepository.existsByUsername(user.getUsername())) {
             throw new EntityExistsException(ExceptionConstant.USERNAME_EXISTS.getMessage());
         }
@@ -38,10 +38,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new EntityExistsException(ExceptionConstant.USER_EMAIL_EXISTS.getMessage());
         }
 
-        User savedUser = userRepository.save(user);
-        cacheService.put(getRedisKey(savedUser.getUsername()), savedUser);
+        return save(user);
+    }
 
-        return savedUser;
+    @Override
+    public User update(User user) {
+        return save(user);
     }
 
     @Override
@@ -57,6 +59,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             cacheService.put(redisKey, user);
             return user;
         });
+    }
+
+    private User save(User user) {
+        User savedUser = userRepository.save(user);
+        cacheService.put(getRedisKey(savedUser.getUsername()), savedUser);
+
+        return savedUser;
     }
 
     private String getRedisKey(String username) {

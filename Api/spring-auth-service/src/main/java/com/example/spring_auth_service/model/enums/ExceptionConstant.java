@@ -13,7 +13,9 @@ public enum ExceptionConstant {
     METHOD_ARGUMENT_NOT_VALID("One or more fields do not match the validation parameters"),
     REFRESH_TOKEN_MISSING("Refresh token is required for authentication."),
     INVALID_REFRESH_TOKEN("Invalid refresh token."),
-    EMAIL_NOT_VERIFIED("User email is not verified."),;
+    EMAIL_NOT_VERIFIED("User email is not verified."),
+    VERIFICATION_TOKEN_NOT_FOUND("Verification token not found."),
+    VERIFICATION_TOKEN_EXPIRED("Verification link has expired. Please request a new one.");
 
     private final String message;
 }

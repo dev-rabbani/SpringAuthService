@@ -2,6 +2,7 @@ package com.example.spring_auth_service.service.impl;
 
 import com.example.spring_auth_service.config.JwtConfig;
 import com.example.spring_auth_service.exception.EmailNotVerifiedException;
+import com.example.spring_auth_service.exception.VerificationTokenExpiredException;
 import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.mapper.UserMapper;
@@ -14,6 +15,7 @@ import com.example.spring_auth_service.model.entity.User;
 import com.example.spring_auth_service.model.entity.VerificationToken;
 import com.example.spring_auth_service.service.*;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.userRegistrationRequestToUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        User registeredUser = userService.save(user);
+        User registeredUser = userService.create(user);
 
         VerificationToken verificationToken = verificationTokenService.create(registeredUser);
 
@@ -61,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                     String.format("""
                             Hi,<br/>
                             Please verify your email by clicking the link below:<br/>
-                            <a href='http://localhost:8080/api/v1/verify?token=%s'>Verify Now</a>
+                            <a href='http://localhost:8080/api/v1/auth/verify?token=%s'>Verify Now</a>
                             <br/><br/>
                             If you didn’t request this, ignore this email.
                             <br/><br/>
@@ -126,5 +128,21 @@ public class AuthServiceImpl implements AuthService {
                 .expiresAt(LocalDateTime.now()
                         .plus(Duration.ofMillis(jwtConfig.getTokenExpiration())))
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void verifyUser(String token) {
+        VerificationToken verificationToken = verificationTokenService.findByToken(token);
+
+        if(verificationToken.isExpired()){
+            throw new VerificationTokenExpiredException(VERIFICATION_TOKEN_EXPIRED.getMessage());
+        }
+
+        User user = verificationToken.getUser();
+        user.setVerified(true);
+        userService.update(user);
+
+        verificationTokenService.delete(verificationToken);
     }
 }

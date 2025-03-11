@@ -1,6 +1,7 @@
 package com.example.spring_auth_service.advice;
 
 import com.example.spring_auth_service.exception.EmailNotVerifiedException;
+import com.example.spring_auth_service.exception.VerificationTokenExpiredException;
 import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.model.dto.response.ValidationErrorResponse;
@@ -64,5 +65,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleEmailNotVerifiedException(EmailNotVerifiedException exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {VerificationTokenExpiredException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ProblemDetail handleVerificationTokenExpiredException(VerificationTokenExpiredException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, exception.getMessage());
     }
 }

@@ -10,4 +10,5 @@ public interface AuthService {
     LoginResponse login(LoginRequest request);
     void logout(String authorizationHeader);
     LoginResponse generateNewAccessToken(String refreshToken);
+    void verifyUser(String verificationToken);
 }
