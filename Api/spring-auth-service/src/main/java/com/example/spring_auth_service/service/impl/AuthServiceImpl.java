@@ -1,6 +1,7 @@
 package com.example.spring_auth_service.service.impl;
 
 import com.example.spring_auth_service.config.JwtConfig;
+import com.example.spring_auth_service.exception.EmailNotVerifiedException;
 import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.mapper.UserMapper;
@@ -26,8 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.example.spring_auth_service.constant.ApplicationConstant.BEARER_PREFIX;
-import static com.example.spring_auth_service.model.enums.ExceptionConstant.INVALID_REFRESH_TOKEN;
-import static com.example.spring_auth_service.model.enums.ExceptionConstant.REFRESH_TOKEN_MISSING;
+import static com.example.spring_auth_service.model.enums.ExceptionConstant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +57,12 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest request) {
         var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
-        var user = (User) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
+
+        if(!user.isVerified()) {
+            throw new EmailNotVerifiedException(EMAIL_NOT_VERIFIED.getMessage());
+        }
+
         String accessToken = jwtService.generateToken(user);
         RefreshToken refreshToken = refreshTokenService.create(request.username());
 

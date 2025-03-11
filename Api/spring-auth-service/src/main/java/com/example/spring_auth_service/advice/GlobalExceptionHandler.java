@@ -1,5 +1,6 @@
 package com.example.spring_auth_service.advice;
 
+import com.example.spring_auth_service.exception.EmailNotVerifiedException;
 import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.model.dto.response.ValidationErrorResponse;
@@ -56,6 +57,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {InvalidRefreshTokenException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleInvalidRefreshTokenException(InvalidRefreshTokenException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {EmailNotVerifiedException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ProblemDetail handleEmailNotVerifiedException(EmailNotVerifiedException exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 }

@@ -52,6 +52,8 @@ public class User extends BaseEntity implements UserDetails {
     private String phoneNumber;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+    @Column(name = "verified", nullable = false)
+    private boolean isVerified;
     @ManyToMany
     @JoinTable(
             name = "user_roles",
