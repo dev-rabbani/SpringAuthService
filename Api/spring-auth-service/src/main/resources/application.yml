@@ -37,10 +37,16 @@ application:
       token-expiration: 600000 # 10 minutes
       refresh-token-expiration: 604800000 # 7 days
 
+# Verification Token Config
+  verification-token:
+    # Expiration in milliseconds
+    expiration: 1800000 # 30 minutes
+
+
 # Mail Configuration
   mail:
-    host:
-    port:
-    username:
-    password:
-    sender:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: c405f4c0a04209
+    password: 321482787ddcf7
+    sender: no-reply@example.com

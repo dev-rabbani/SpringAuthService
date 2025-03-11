@@ -11,7 +11,9 @@ import com.example.spring_auth_service.model.dto.response.LoginResponse;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
 import com.example.spring_auth_service.model.entity.RefreshToken;
 import com.example.spring_auth_service.model.entity.User;
+import com.example.spring_auth_service.model.entity.VerificationToken;
 import com.example.spring_auth_service.service.*;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +42,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final BlackListedTokenService blackListedTokenService;
     private final RefreshTokenService refreshTokenService;
+    private final VerificationTokenService verificationTokenService;
+    private final EmailService emailService;
     private final JwtConfig jwtConfig;
     private final UserMapper userMapper;
 
@@ -49,6 +53,24 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User registeredUser = userService.save(user);
+
+        VerificationToken verificationToken = verificationTokenService.create(registeredUser);
+
+        try {
+            emailService.sendMailAsync(user.getEmail(), "Verify your account",
+                    String.format("""
+                            Hi,<br/>
+                            Please verify your email by clicking the link below:<br/>
+                            <a href='http://localhost:8080/api/v1/verify?token=%s'>Verify Now</a>
+                            <br/><br/>
+                            If you didn’t request this, ignore this email.
+                            <br/><br/>
+                            Thanks,<br/>
+                            Auth Service Team
+                            """, verificationToken.getToken()));
+        } catch (MessagingException e) {
+            log.error("Error while sending verification email. Message = {}", e.getMessage(), e);
+        }
 
         return userMapper.userToRegisteredUserResponse(registeredUser);
     }
