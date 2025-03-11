@@ -36,3 +36,11 @@ application:
       # Expiration in milliseconds
       token-expiration: 600000 # 10 minutes
       refresh-token-expiration: 604800000 # 7 days
+
+# Mail Configuration
+  mail:
+    host:
+    port:
+    username:
+    password:
+    sender:
