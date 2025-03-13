@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.example.spring_auth_service.constant.ApplicationConstant.BEARER_PREFIX;
 import static com.example.spring_auth_service.model.enums.ExceptionConstant.*;
@@ -144,5 +145,33 @@ public class AuthServiceImpl implements AuthService {
         userService.update(user);
 
         verificationTokenService.delete(verificationToken);
+    }
+
+    @Override
+    public void sendPasswordResetEmail(String email) {
+        Optional<User> userOptional = userService.findByEmail(email);
+
+        if(userOptional.isEmpty()) {
+            log.warn("No account found for email: {}", email);
+            return;
+        }
+
+        VerificationToken verificationToken = verificationTokenService.create(userOptional.get());
+
+        try {
+            emailService.sendMailAsync(email, "Reset Your Password",
+                    String.format("""
+                            Hi,<br/>
+                            We received a request to reset your password. Click the link below to set a new one:<br/>
+                            <a href='http://localhost:8080/auth/reset-password?token=%s'>Reset Password</a>
+                            <br/><br/>
+                            If you didn’t request this, ignore this email.
+                            <br/><br/>
+                            Thanks,<br/>
+                            Auth Service Team
+                            """, verificationToken.getToken()));
+        } catch (MessagingException e) {
+            log.error("Error while sending password reset email. Message = {}", e.getMessage(), e);
+        }
     }
 }

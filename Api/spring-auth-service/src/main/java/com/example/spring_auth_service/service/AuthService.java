@@ -11,4 +11,5 @@ public interface AuthService {
     void logout(String authorizationHeader);
     LoginResponse generateNewAccessToken(String refreshToken);
     void verifyUser(String verificationToken);
+    void sendPasswordResetEmail(String email);
 }

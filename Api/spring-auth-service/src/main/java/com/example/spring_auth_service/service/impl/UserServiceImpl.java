@@ -7,6 +7,7 @@ import com.example.spring_auth_service.repository.UserRepository;
 import com.example.spring_auth_service.service.CacheService;
 import com.example.spring_auth_service.service.UserService;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static com.example.spring_auth_service.model.enums.ExceptionConstant.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -54,11 +57,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return userOptional.orElseGet(() -> {
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException(username));
+                    .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND.getMessage()));
 
             cacheService.put(redisKey, user);
             return user;
         });
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     private User save(User user) {
