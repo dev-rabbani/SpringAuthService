@@ -7,6 +7,7 @@ import com.example.spring_auth_service.exception.InvalidRefreshTokenException;
 import com.example.spring_auth_service.exception.RefreshTokenMissingException;
 import com.example.spring_auth_service.mapper.UserMapper;
 import com.example.spring_auth_service.model.dto.request.LoginRequest;
+import com.example.spring_auth_service.model.dto.request.ResetPasswordRequest;
 import com.example.spring_auth_service.model.dto.request.UserRegistrationRequest;
 import com.example.spring_auth_service.model.dto.response.LoginResponse;
 import com.example.spring_auth_service.model.dto.response.RegisteredUserResponse;
@@ -173,5 +174,20 @@ public class AuthServiceImpl implements AuthService {
         } catch (MessagingException e) {
             log.error("Error while sending password reset email. Message = {}", e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        VerificationToken verificationToken = verificationTokenService.findByToken(request.token());
+
+        if(verificationToken.isExpired()){
+            throw new VerificationTokenExpiredException(VERIFICATION_TOKEN_EXPIRED.getMessage());
+        }
+
+        User user = verificationToken.getUser();
+        user.setPassword(passwordEncoder.encode(request.password()));
+        userService.update(user);
+
+        verificationTokenService.delete(verificationToken);
     }
 }

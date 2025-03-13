@@ -2,6 +2,7 @@ package com.example.spring_auth_service.controller;
 
 import com.example.spring_auth_service.model.dto.request.ForgotPasswordRequest;
 import com.example.spring_auth_service.model.dto.request.LoginRequest;
+import com.example.spring_auth_service.model.dto.request.ResetPasswordRequest;
 import com.example.spring_auth_service.model.dto.request.UserRegistrationRequest;
 import com.example.spring_auth_service.model.dto.response.ApiResponse;
 import com.example.spring_auth_service.model.dto.response.LoginResponse;
@@ -70,5 +71,12 @@ public class AuthController {
         authService.sendPasswordResetEmail(request.email());
 
         return ResponseEntity.ok(ApiResponse.success(PASSWORD_RESET_INSTRUCTIONS_SENT));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+
+        return ResponseEntity.ok(ApiResponse.success(PASSWORD_RESET_SUCCESSFUL));
     }
 }

@@ -13,4 +13,5 @@ public class ApplicationConstant {
     public static final String ACCESS_TOKEN_REFRESHED = "Access token refreshed successfully.";
     public static final String EMAIL_VERIFICATION_SUCCESSFUL = "Email verified successfully.";
     public static final String PASSWORD_RESET_INSTRUCTIONS_SENT = "If an account with that email exists, we’ll send password reset instructions.";
+    public static final String PASSWORD_RESET_SUCCESSFUL = "Password reset successfully.";
 }
