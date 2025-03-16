@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: Pial Kanti Samadder
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: users
+
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: firstname
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: lastname
+                  type: VARCHAR(25)
+
+              - column:
+                  name: username
+                  type: VARCHAR(10)
+                  constraints:
+                    unique: true
+                    nullable: false
+
+              - column:
+                  name: email
+                  type: VARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+
+              - column:
+                  name: password
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: phone_number
+                  type: VARCHAR(15)
+
+              - column:
+                  name: date_of_birth
+                  type: DATE
+
+              - column:
+                  name: verified
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false

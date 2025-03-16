@@ -6,10 +6,9 @@ spring:
       enabled: true
 
   jpa:
-    generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -21,7 +20,11 @@ spring:
     password: admin@123
     url: jdbc:postgresql://localhost:5432/auth_db?createDatabaseIfNotExist=true
 
-# Redis
+# Liquibase Configuration
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+  # Redis
   data:
     redis:
       host: localhost
