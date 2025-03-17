@@ -19,8 +19,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Permission extends BaseEntity {
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+    @Column(name = "code", nullable = false, unique = true, length = 50)
+    private String code;
 
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles;

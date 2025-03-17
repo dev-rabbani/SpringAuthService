@@ -16,8 +16,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role extends BaseEntity {
-    @Column(name = "name", nullable = false, length = 25)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
+    @Column(name = "code", nullable = false, unique = true, length = 25)
+    private String code;
 
     @ManyToMany
     @JoinTable(
