@@ -99,3 +99,6 @@ The application will be available at *[http://localhost:8080](http://localhost:8
 
 ## **Contributing**
 Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+## License
+This project is licensed under the [MIT License](https://opensource.org/license/mit).
