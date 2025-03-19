@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: prod
   application:
     name: spring-auth-service
   mvc:
@@ -13,23 +15,9 @@ spring:
       hibernate:
         format_sql: true
 
-# Database connection
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: admin
-    password: admin@123
-    url: jdbc:postgresql://localhost:5432/auth_db?createDatabaseIfNotExist=true
-
 # Liquibase Configuration
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-
-  # Redis
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: admin@123
 
 application:
 # Jwt Configuration
