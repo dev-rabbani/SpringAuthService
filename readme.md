@@ -31,7 +31,7 @@ To build and run the application using Docker Compose, execute the following com
 docker compose up -d
 ```
 
-- The application will be accessible at http://localhost:8080.
+- The application will be accessible at *[http://localhost:8080](http://localhost:8080)*.
 - Docker Compose will automatically build the necessary images and start the required containers, including any dependencies such as databases, Redis, or other services.
 
 #### Stopping the Application
