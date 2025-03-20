@@ -3,9 +3,6 @@ spring:
     active: prod
   application:
     name: spring-auth-service
-  mvc:
-    problemdetails:
-      enabled: true
 
   jpa:
     show-sql: true
