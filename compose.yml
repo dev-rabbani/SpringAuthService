@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: admin@123
       POSTGRES_DB: auth_db
     volumes:
-      - ~/apps/postgres/spring-auth-service:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - backend_net
 
@@ -38,3 +38,6 @@ services:
 networks:
   backend_net:
     driver: bridge
+
+volumes:
+  postgres_data:
