@@ -23,16 +23,23 @@ cd SpringAuthService
 Once you have the project, you can either run the application directly using Docker Compose or follow the manual steps outlined below to run it locally.
 
 ### 3. Running the Application with Docker Compose
+#### Build and Start the Containers
 **Prerequisite:** Ensure Docker is installed and running on your system.
 
 To build and run the application using Docker Compose, execute the following command. This will start the containers in the background:
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
+This command does the following:
+- `--build`: Forces Docker Compose to rebuild the images if there are changes in the code or configuration files.
+- `-d`: Runs the containers in detached mode, so they run in the background.
 
-- The application will be accessible at *[http://localhost:8080](http://localhost:8080)*.
-- Docker Compose will automatically build the necessary images and start the required containers, including any dependencies such as databases, Redis, or other services.
+Once the containers are up and running, the application will be accessible at:
+ - *[http://localhost:8080](http://localhost:8080)*
+
+\
+Docker Compose will automatically start all required services, such as PostgreSQL, Redis, and the application itself.
 
 #### Stopping the Application
 
