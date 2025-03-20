@@ -15,6 +15,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -28,7 +29,7 @@ databaseChangeLog:
                     unique: true
 
               - column:
-                  name: expiry_date
+                  name: expiry_time
                   type: TIMESTAMP
                   constraints:
                     nullable: false

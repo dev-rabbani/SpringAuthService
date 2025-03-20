@@ -12,3 +12,12 @@ spring:
       host: redis
       port: 6379
       password: admin@123
+
+application:
+  # Mail Configuration
+  mail:
+    host: live.smtp.mailtrap.io
+    port: 587
+    username: smtp@mailtrap.io
+    password: b7235bb0e82b2ace73e959c96a8f65ea
+    sender: hello@demomailtrap.co

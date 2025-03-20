@@ -12,3 +12,12 @@ spring:
       host: localhost
       port: 6379
       password: admin@123
+
+application:
+  # Mail Configuration
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: c405f4c0a04209
+    password: 321482787ddcf7
+    sender: no-reply@example.com
