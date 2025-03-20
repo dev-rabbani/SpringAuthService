@@ -85,9 +85,10 @@ public class AuthServiceImpl implements AuthService {
 
         User user = (User) authentication.getPrincipal();
 
-        if(!user.isVerified()) {
+        //todo enable this after getting a solution for smtp
+        /*if(!user.isVerified()) {
             throw new EmailNotVerifiedException(EMAIL_NOT_VERIFIED.getMessage());
-        }
+        }*/
 
         String accessToken = jwtService.generateToken(user);
         RefreshToken refreshToken = refreshTokenService.create(request.username());
