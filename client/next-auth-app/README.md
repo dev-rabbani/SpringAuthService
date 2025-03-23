@@ -37,3 +37,35 @@ This custom script will run `prettier:fix` after it adds the component.
 We should avoid modifying shad-cn components directly. We can create our own `custom` components using shad-cn component and apply restyling as needed. We don't want to lose the functionality that shad-cn has already implemented.
 
 **This should be done carefully. We should not alter `shad-cn`'s logic implementation.**
+
+## Run and Build Instructions
+
+### Running the Project
+
+To start the development server, run:
+
+```
+npm install
+npm run dev
+```
+
+This will start the Next.js application on `http://localhost:3000`.
+
+### Building the Project
+
+To create a production build, run:
+
+```
+npm run build
+```
+
+This will generate the optimized production build in the `.next` folder.
+
+To preview the production build, use:
+
+```
+npm run start
+```
+
+This will serve the built project on `http://localhost:3000`.
+
